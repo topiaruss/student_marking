@@ -170,14 +170,17 @@ class SimpleCRUD:
       cols = int(feed.col_count.text)
       cells = [  [ {} for col in range(cols)] for row in range(rows)]
       answer_row = name_col = None
-      for e in feed.entry:
-          r = int(e.cell.row)
-          c = int(e.cell.col)
-          cells[r][c]['e'] = e
-          currtxt = e.content.text or ''
-          cells[r][c]['v'] = currtxt
-          if '<>' in (currtxt):
-              answer_row, name_col = r, c
+      try:
+          for e in feed.entry:
+              r = int(e.cell.row)
+              c = int(e.cell.col)
+              cells[r][c]['e'] = e
+              currtxt = e.content.text or ''
+              cells[r][c]['v'] = currtxt
+              if '<>' in (currtxt):
+                  answer_row, name_col = r, c
+      except:
+          import pdb; pdb.set_trace( )
       while [ c for c in cells[-1] if c] == []:
           del cells[-1]
       rows = len(cells)
@@ -188,12 +191,16 @@ class SimpleCRUD:
       feed = self.gd_client.GetCellsFeed(self.curr_key, self.curr_wksht_id)
       map = self._mapCells(feed)
       cells, arow, ncol, rows, cols = [map[x] for x in ('cells', 'arow', 'ncol', 'rows', 'cols')]
-      answers = [v for v in [ c for c in cells[arow][ncol+1:] if c['v'] ] ]
+      answers = [v for v in [ c for c in cells[arow][ncol+1:] if c.get('v','') ] ]
       for r in cells[arow+1:]:
           #print [c.get('v','') for c in r ]
           marks = []
           for i,col in enumerate(r[ncol+1 : ncol+1 + len(answers)]):
-              marks.append( len(set(col.get('v','')) & set(answers[i]['v']) ))              
+              thisOne = len(set(col.get('v','')) & set(answers[i]['v']) )
+              overage = len(col.get('v','')) - len(answers[i]['v'])
+              if overage > 0:
+                 thisOne = max(0, thisOne-overage)
+              marks.append(thisOne)              
           print '%30s' % r[ncol]['v'],  marks, sum(marks)
           
           currRow = int(r[ncol]['e'].cell.row)
