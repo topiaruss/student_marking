@@ -113,8 +113,8 @@ class SimpleCRUD:
   def _CellsUpdateAction(self, row, col, inputValue):
     entry = self.gd_client.UpdateCell(row=row, col=col, inputValue=inputValue, 
         key=self.curr_key, wksht_id=self.curr_wksht_id)
-    if isinstance(entry, gdata.spreadsheet.SpreadsheetsCell):
-      print 'Updated!'
+    #if isinstance(entry, gdata.spreadsheet.SpreadsheetsCell):
+    #  print 'Updated!'
         
   def _ListGetAction(self):
     # Get the list feed
@@ -195,6 +195,10 @@ class SimpleCRUD:
           for i,col in enumerate(r[ncol+1 : ncol+1 + len(answers)]):
               marks.append( len(set(col.get('v','')) & set(answers[i]['v']) ))              
           print '%30s' % r[ncol]['v'],  marks, sum(marks)
+          
+          currRow = int(r[ncol]['e'].cell.row)
+          scoreCol = int(r[ncol]['e'].cell.col) + len(answers) + 1
+          self._CellsUpdateAction(currRow, scoreCol, str(sum(marks)))
       
     
   def Run(self):

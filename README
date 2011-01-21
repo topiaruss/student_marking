@@ -1,0 +1,23 @@
+This quick program marks a google spreadsheet that conforms to these 
+conventions:
+
++==================================================
+|     |       | 1 | 2 | 3 ...
+|     | <>    |a  |cd | d ...
+|     | smith | a |dx | abc 
+.
+.
+.
+
+The Character string '<>' marks the answer row and the names column
+The width of the attempts matrix is determined by the first empty answer cell
+The height of the attempts matrix is determined by the last row with data.
+
+So, it's possible to ad other cols or rows left or above the data. But not 
+below it.  This would be easy to change.
+
+The marking.py file is the business... rawData is just a tester, from Google.
+
+You need a command like:
+
+python marking.py --user='joan@gmail.com' --pw='somepass'
