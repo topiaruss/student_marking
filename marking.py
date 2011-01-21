@@ -1,5 +1,7 @@
 """Quick program to compute student test scores from a google spreadsheet.
 Based on Google's Python API demo.
+http://code.google.com/apis/spreadsheets/data/1.0/developers_guide_python.html
+http://code.google.com/apis/spreadsheets/data/3.0/developers_guide.html
 
 Russ Ferriday, 2011-01-20
 russf@topia.com
